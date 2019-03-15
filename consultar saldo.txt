@@ -1,0 +1,41 @@
+*****************Dentro main****************************
+StreamReader lectura = new StreamReader("./bd.txt");
+
+            bool encontrado;
+            encontrado = false;
+            string[] campos = new string[6];
+            char[] separador = { ',' };
+
+            while (!lectura.EndOfStream)
+            {
+
+                Console.WriteLine("ingrese numero de cuenta de consulta");
+                string busquedacuenta = Console.ReadLine();
+                string cadena = lectura.ReadLine();
+
+                while (cadena != null && encontrado == false)
+                {
+                    campos = cadena.Split(separador);
+                    if (campos[3].Trim().Equals(busquedacuenta))
+                    {
+                        Console.WriteLine($"Nombre: {campos[1].Trim()}");
+                        Console.WriteLine($"Apellido: {campos[2].Trim()}");
+                        Console.WriteLine($"DNI: {campos[0].Trim()}");
+                        Console.WriteLine($"Monto: {campos[4].Trim()}");
+                        Console.WriteLine($"Moneda: {campos[5].Trim()}");
+                        encontrado = true;
+                    }
+                    else
+                    {
+                        cadena = lectura.ReadLine();
+                    }
+                    
+                }
+                if (encontrado == false)
+                {
+                    Console.WriteLine("no existe");
+                }
+                //lectura.Close();
+
+                Console.ReadKey();
+***************************************************
