@@ -26,6 +26,7 @@ namespace scrumBanco
                     {
                         Cliente clien = Crear(dni);
                         Console.WriteLine("Este es un Cajero Automatico!!!");
+                        console.WriteLine($"DNI Cliente: {dni}");
                         Console.WriteLine("1. Consultar Saldo");
                         Console.WriteLine("2. Depositar");
                         Console.WriteLine("3. Retirar");
