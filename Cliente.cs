@@ -4,62 +4,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
-namespace Cajero
+namespace scrumBanco
 {
     class Cliente
     {
-        string[] datos = new string[6];
-        List<string> lista = new List<string>() { };
-        
-        public void Leer(string dni)
+        string dni;
+        string nombre;
+        string apellido;
+        List<Cuenta> cuentas;
+
+        public Cliente()
         {
-            StreamReader sr = new StreamReader(@"F:\CodiGo\Scrum\BD.txt");
-            
-            string cadena;
-            int count = 0;
-            char separador = ',';
-            string estado = false;
 
-            while (!sr.EndOfStream)
+        }
+
+        public string DNI { get => dni; set => dni = value; }
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Apellido { get => apellido; set => apellido = value; }
+        internal List<Cuenta> Cuentas { get => cuentas; set => cuentas = value; }
+
+        public void IngresarDinero()
+        {
+            int dDeposito; //dinero a ingresar
+            int cuenRetiro; //cuenta a la que ingresara dinero
+            List<Cuenta> cuent = Cuentas;
+            int i;
+            for (i = 0; i < cuent.Count - 1; i++)
             {
-                cadena = sr.ReadLine();
-                lista.Add(cadena);
-
-                while (cadena != null)
+                Console.WriteLine("{0}.- Cuenta: {1}", i + 1, cuentas[i].NroCuenta);
+            }
+            Console.WriteLine("A que cuenta desea ingresar dinero?");
+            cuenRetiro = int.Parse(Console.ReadLine());
+            cuenRetiro = cuenRetiro - 1;
+            if (cuenRetiro < i - 1 && cuenRetiro > 0)
+            {
+                Console.WriteLine("Cuanto dinero quiere ingresar?");
+                dDeposito = int.Parse(Console.ReadLine());
+                cuentas[cuenRetiro].Monto = cuent[cuenRetiro].Monto + dDeposito;
+                Console.WriteLine("Deposito exitoso");
+            }
+            else
+            {
+                Console.WriteLine("Cuenta no existente, se le redirigira al inicio");
+            }
+        }
+        public void RetirarDinero()
+        {
+            int dRetiro; //dinero a retirar
+            int cuenRetiro; //cuenta de la que retirara dinero            
+            int i;
+            for (i = 0; i < cuentas.Count - 1; i++)
+            {
+                Console.WriteLine("{0}.- Cuenta: {1}", i + 1, cuentas[i].NroCuenta);
+            }
+            Console.WriteLine("De que cuenta desea retirar dinero?");
+            cuenRetiro = int.Parse(Console.ReadLine());
+            cuenRetiro = cuenRetiro - 1;
+            if (cuenRetiro < i - 1 && cuenRetiro > 0)
+            {
+                Console.WriteLine("Cuanto dinero quiere retirar?");
+                dRetiro = int.Parse(Console.ReadLine());
+                if (dRetiro > cuentas[cuenRetiro].Monto)
                 {
-                    count = count + 1;
-                    datos = cadena.Split(separador);
-
-                    if (datos[0].Trim().Equals(dni))
-                    {
-                        Console.WriteLine(count);
-                        estado = true;
-                        break;
-                    }
-                    cadena = sr.ReadLine();
+                    Console.WriteLine("No dispone de los fondos suficientes");
+                }
+                else
+                {
+                    cuentas[cuenRetiro].Monto = cuentas[cuenRetiro].Monto - dRetiro;
+                    Console.WriteLine("Retiro exitoso");
                 }
             }
-
-            if(estado == true)
+            else
             {
-                file.delete("exension...");
-                Depositar();
+                Console.WriteLine("Cuenta no existente, se le redirigira al inicio");
             }
-            
-            Console.ReadKey();
         }
-}
-
-        //public void Depositar()
-        //{
-        //    using (StreamWriter sw = new StreamWriter(@"F:\CodiGo\Scrum\BD.txt"))
-        //    {
-        //        foreach (string x in lista)
-        //        {
-        //            sw.Write(x);
-        //        }
-        //    }     
-        //}
-    
+    }
 }
