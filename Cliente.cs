@@ -8,43 +8,58 @@ using System.IO;
 namespace Cajero
 {
     class Cliente
-    {      
-        public void Leer(string cuenta)
+    {
+        string[] datos = new string[6];
+        List<string> lista = new List<string>() { };
+        
+        public void Leer(string dni)
         {
             StreamReader sr = new StreamReader(@"F:\CodiGo\Scrum\BD.txt");
-            string[] datos = new string[6];
+            
             string cadena;
-            int monto;
+            int count = 0;
             char separador = ',';
-            int i = 0;
+            string estado = false;
 
-            cadena = sr.ReadLine();
-            Console.WriteLine(cadena);
-            while (cadena != null)
+            while (!sr.EndOfStream)
             {
-                datos = cadena.Split(separador);
-                Console.WriteLine(datos[3]);
-                string valorI = Convert.ToString(datos[3]);
-                Console.ReadKey();
-                i++;
-                if (valorI == cuenta)
+                cadena = sr.ReadLine();
+                lista.Add(cadena);
+
+                while (cadena != null)
                 {
-                    Console.WriteLine($"monto: {datos[4]}");
-                    Console.WriteLine($"cantidad a depositar a {datos[4]}");
-                    int z = Convert.ToInt32(datos[4]);
-                    monto = Convert.ToInt32(Console.ReadLine());
-                    z = z  + monto;
-                    Console.WriteLine(z);
-                }         
+                    count = count + 1;
+                    datos = cadena.Split(separador);
+
+                    if (datos[0].Trim().Equals(dni))
+                    {
+                        Console.WriteLine(count);
+                        estado = true;
+                        break;
+                    }
+                    cadena = sr.ReadLine();
+                }
             }
+
+            if(estado == true)
+            {
+                file.delete("exension...");
+                Depositar();
+            }
+            
             Console.ReadKey();
         }
+}
 
-        public void Depositar(int monto)
-        {
-            StreamWriter sw = new StreamWriter(@"F:\CodiGo\Scrum\dsa.txt");
-          
-
-        }
-    }
+        //public void Depositar()
+        //{
+        //    using (StreamWriter sw = new StreamWriter(@"F:\CodiGo\Scrum\BD.txt"))
+        //    {
+        //        foreach (string x in lista)
+        //        {
+        //            sw.Write(x);
+        //        }
+        //    }     
+        //}
+    
 }
